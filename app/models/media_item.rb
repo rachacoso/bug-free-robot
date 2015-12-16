@@ -1,5 +1,6 @@
 class MediaItem < ActiveRecord::Base
-	has_one :arts_type
+	has_and_belongs_to_many :arts_types
 	has_many :mood_scores
 	has_many :moods, through :mood_score
+	belongs_to :media_type
 end

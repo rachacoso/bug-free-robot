@@ -1,3 +1,3 @@
 class ArtsType < ActiveRecord::Base
-	belongs_to :media_item
+	has_and_belongs_to_many :media_items
 end
