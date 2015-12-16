@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :choice_category do
     name "MyString"
-description "MyText"
+		description "MyText"
   end
 
 end
