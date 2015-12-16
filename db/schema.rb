@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216233106) do
+ActiveRecord::Schema.define(version: 20151216233602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,7 +70,6 @@ ActiveRecord::Schema.define(version: 20151216233106) do
     t.text     "description"
     t.integer  "times_served"
     t.integer  "duration"
-    t.integer  "arts_type_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.integer  "media_type_id"
@@ -107,7 +106,6 @@ ActiveRecord::Schema.define(version: 20151216233106) do
   end
 
   add_foreign_key "choices", "choice_categories"
-  add_foreign_key "media_items", "arts_types"
   add_foreign_key "media_items", "media_types"
   add_foreign_key "mood_choices", "choices"
   add_foreign_key "mood_choices", "moods"
