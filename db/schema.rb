@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216233602) do
+ActiveRecord::Schema.define(version: 20151217000220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,14 +40,6 @@ ActiveRecord::Schema.define(version: 20151216233602) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
-
-  create_table "arts_types_media_types", id: false, force: :cascade do |t|
-    t.integer "media_type_id", null: false
-    t.integer "arts_type_id",  null: false
-  end
-
-  add_index "arts_types_media_types", ["arts_type_id", "media_type_id"], name: "index_arts_types_media_types_on_arts_type_id_and_media_type_id", using: :btree
-  add_index "arts_types_media_types", ["media_type_id", "arts_type_id"], name: "index_arts_types_media_types_on_media_type_id_and_arts_type_id", using: :btree
 
   create_table "choice_categories", force: :cascade do |t|
     t.string   "name"
