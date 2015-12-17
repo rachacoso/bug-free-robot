@@ -1,5 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe MoodScore, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to(:media_item) }
+  it { should belong_to(:mood) }
 end
