@@ -1,4 +1,41 @@
 <p id="notice"><%= notice %></p>
 
+<div class="row">
+	<div class="small-12 columns">
+		<h2><%= @media_item.name %><br>
+		<small><%= @media_item.description %></small>
+		</h2>
+	</div><!--/.small-12-->
+</div><!--/.row-->
+
+<div class="row">
+	<div class="small-3 columns">
+		<h4>Arts Type</h4>
+	</div><!--/.small-3-->
+	<div class="small-9 columns">
+		<% @media_item.arts_types.each do |at| %>
+			<%= at.name %><br>
+		<% end %>		
+	</div><!--/.small-9-->
+</div><!--/.row-->
+<div class="row">
+	<div class="small-3 columns">
+		<h4>Media Type</h4>
+	</div><!--/.small-3-->
+	<div class="small-9 columns">
+		<%= @media_item.media_type.name %>		
+	</div><!--/.small-9-->
+</div><!--/.row-->
+<div class="row">
+	<div class="small-3 columns">
+		<h4>Moods</h4>
+	</div><!--/.small-3-->
+	<div class="small-9 columns">
+		<% @media_item.moods.each do |mood| %>
+			<%= mood.name %><br>
+		<% end %>		
+	</div><!--/.small-9-->
+</div><!--/.row-->
+
 <%= link_to 'Edit', edit_media_item_path(@media_item) %> |
 <%= link_to 'Back', media_items_path %>

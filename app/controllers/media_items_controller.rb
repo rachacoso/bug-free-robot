@@ -25,6 +25,7 @@ class MediaItemsController < ApplicationController
   # POST /media_items.json
   def create
     @media_item = MediaItem.new(media_item_params)
+    set_relations
 
     respond_to do |format|
       if @media_item.save
@@ -40,8 +41,11 @@ class MediaItemsController < ApplicationController
   # PATCH/PUT /media_items/1
   # PATCH/PUT /media_items/1.json
   def update
+    @media_item.update(media_item_params)
+    set_relations
+
     respond_to do |format|
-      if @media_item.update(media_item_params)
+      if @media_item.save
         format.html { redirect_to @media_item, notice: 'Media item was successfully updated.' }
         format.json { render :show, status: :ok, location: @media_item }
       else
@@ -67,8 +71,17 @@ class MediaItemsController < ApplicationController
       @media_item = MediaItem.find(params[:id])
     end
 
+    # set the model relation values
+    def set_relations
+      @media_item.media_type = MediaType.find(params[:media_item][:media_type])
+      @media_item.arts_types = ArtsType.find(params[:media_item][:arts_types].select{|key, value| value == "1" }.keys)
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def media_item_params
-      params[:media_item]
+      params.require(:media_item).permit(
+        :name,
+        :description
+      )
     end
 end

@@ -1,0 +1,35 @@
+<% content_for :title do %>
+Choices
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<h1>Choices</h1>
+
+
+
+<% ChoiceCategory.all.each do |category| %>
+<table>
+  <thead>
+    <tr>
+      <th colspan="5"> <%= category.name %> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% category.choices.each do |choice| %>
+      <tr>
+        <td><%= choice.name %></td>
+        <td><%= choice.times_served %></td>
+        <td><%= link_to 'Show', choice %></td>
+        <td><%= link_to 'Edit', edit_choice_path(choice) %></td>
+        <td><%= link_to 'Destroy', choice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
+
+
+<br>
+
+<%= link_to 'New Choice', new_choice_path %>

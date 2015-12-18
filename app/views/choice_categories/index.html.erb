@@ -1,0 +1,29 @@
+<% content_for :title do %>
+Choice Categories
+<% end %>
+<p id="notice"><%= notice %></p>
+
+<h1>Choice Categories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @choice_categories.each do |choice_category| %>
+      <tr>
+        <td><%= choice_category.name %></td>
+        <td><%= link_to 'Show', choice_category %></td>
+        <td><%= link_to 'Edit', edit_choice_category_path(choice_category) %></td>
+        <td><%= link_to 'Destroy', choice_category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Choice category', new_choice_category_path %>

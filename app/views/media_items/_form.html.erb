@@ -1,17 +1,45 @@
-<%= form_for(@media_item) do |f| %>
-  <% if @media_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@media_item.errors.count, "error") %> prohibited this media_item from being saved:</h2>
+<div class="row">
+  <div class="small-12 columns">
 
-      <ul>
-      <% @media_item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+    <%= form_for(@media_item) do |f| %>
+      <% if @media_item.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@media_item.errors.count, "error") %> prohibited this media_item from being saved:</h2>
+
+          <ul>
+          <% @media_item.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+      <%= f.label :name,  "Media Item Name" %>
+      <%= f.text_field :name %>
+
+      <%= f.label :description,  "Description" %>
+      <%= f.text_field :description %>
+
+
+      <%= select_tag "media_item[media_type]", options_from_collection_for_select(MediaType.all, :id, :name, @media_item.media_type ? @media_item.media_type.id : "") %>
+      
+
+      <%= label_tag "Arts Type" %>
+
+      <% ArtsType.all.each do |at| %>
+        <%= hidden_field_tag "media_item[arts_types][#{at.id}]", 0, id: '' %>
+        <%= check_box_tag("media_item[arts_types][#{at.id}]", 1, (@media_item.arts_types.include?(at) rescue false) ? true : false) %>
+        <%= label_tag "media_item[arts_types][#{at.id}]", at.name %>
+      <% end %>
+
+<%#= hidden_field_tag "subsectors[#{ssc.id}]", 0, id: '' %>
+<%#= check_box_tag "subsectors[#{ssc.id}]", ssc.id, (@brand.subsectors.find(ssc) rescue false) ? true : false %>
+<%#= label_tag("subsectors[#{ssc.id}]", ssc.name) %>
+
+      <div class="actions">
+        <%= f.submit class: "button tiny" %>
+      </div>
+    <% end %>
+
+  </div><!--/.small-12-->
+</div><!--/.row-->

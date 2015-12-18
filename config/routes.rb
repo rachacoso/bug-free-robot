@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
+  
   devise_for :admin_users
 
   resources :media_items
+  resources :arts_types
+  resources :media_types
+  resources :moods
+  resources :choice_categories
+  resources :choices
+
+  get '/question' => 'question_generator#new_question'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

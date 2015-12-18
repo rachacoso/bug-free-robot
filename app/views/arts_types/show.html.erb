@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+	<div class="small-12 columns">
+		<%= @arts_type.name %>		
+	</div><!--/.small-12-->
+</div><!--/.row-->
+<div class="row">
+	<div class="small-12 columns">
+		<%= @arts_type.description %>
+	</div><!--/.small-12-->
+</div><!--/.row-->
+
+
+<%= link_to 'Edit', edit_arts_type_path(@arts_type) %> |
+<%= link_to 'Back', arts_types_path %>
