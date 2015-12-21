@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :arts_type do
-    name "MyString"
-		description "MyText"
+    name { FFaker::Lorem.word }
+		description { FFaker::Lorem.paragraph }
   end
 
 end
