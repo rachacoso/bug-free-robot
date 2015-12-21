@@ -32,9 +32,13 @@
         <%= label_tag "media_item[arts_types][#{at.id}]", at.name %>
       <% end %>
 
-<%#= hidden_field_tag "subsectors[#{ssc.id}]", 0, id: '' %>
-<%#= check_box_tag "subsectors[#{ssc.id}]", ssc.id, (@brand.subsectors.find(ssc) rescue false) ? true : false %>
-<%#= label_tag("subsectors[#{ssc.id}]", ssc.name) %>
+      <%= label_tag "Mood" %>
+
+      <% Mood.all.each do |m| %>
+        <%= hidden_field_tag "media_item[moods][#{m.id}]", 0, id: '' %>
+        <%= check_box_tag("media_item[moods][#{m.id}]", 1, (@media_item.moods.include?(m) rescue false) ? true : false) %>
+        <%= label_tag "media_item[moods][#{m.id}]", m.name %>
+      <% end %>
 
       <div class="actions">
         <%= f.submit class: "button tiny" %>

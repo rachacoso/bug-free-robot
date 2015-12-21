@@ -75,6 +75,7 @@ class MediaItemsController < ApplicationController
     def set_relations
       @media_item.media_type = MediaType.find(params[:media_item][:media_type])
       @media_item.arts_types = ArtsType.find(params[:media_item][:arts_types].select{|key, value| value == "1" }.keys)
+      @media_item.moods = Mood.find(params[:media_item][:moods].select{|key, value| value == "1" }.keys)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
