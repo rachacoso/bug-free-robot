@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217001805) do
+ActiveRecord::Schema.define(version: 20151216214313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20151217001805) do
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "arts_types", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        null: false
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -46,18 +46,15 @@ ActiveRecord::Schema.define(version: 20151217001805) do
     t.integer "media_item_id", null: false
   end
 
-  add_index "arts_types_media_items", ["arts_type_id"], name: "index_arts_types_media_items_on_arts_type_id", using: :btree
-  add_index "arts_types_media_items", ["media_item_id"], name: "index_arts_types_media_items_on_media_item_id", using: :btree
-
   create_table "choice_categories", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        null: false
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
   create_table "choices", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",               null: false
     t.integer  "times_served"
     t.integer  "times_selected"
     t.integer  "choice_category_id"
@@ -66,17 +63,17 @@ ActiveRecord::Schema.define(version: 20151217001805) do
   end
 
   create_table "media_items", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",          null: false
     t.text     "description"
     t.integer  "times_served"
     t.integer  "duration"
+    t.integer  "media_type_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "media_type_id"
   end
 
   create_table "media_types", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        null: false
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -99,16 +96,18 @@ ActiveRecord::Schema.define(version: 20151217001805) do
   end
 
   create_table "moods", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",        null: false
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
+  add_foreign_key "arts_types_media_items", "arts_types", on_delete: :cascade
+  add_foreign_key "arts_types_media_items", "media_items", on_delete: :cascade
   add_foreign_key "choices", "choice_categories"
   add_foreign_key "media_items", "media_types"
-  add_foreign_key "mood_choices", "choices"
-  add_foreign_key "mood_choices", "moods"
-  add_foreign_key "mood_scores", "media_items"
-  add_foreign_key "mood_scores", "moods"
+  add_foreign_key "mood_choices", "choices", on_delete: :cascade
+  add_foreign_key "mood_choices", "moods", on_delete: :cascade
+  add_foreign_key "mood_scores", "media_items", on_delete: :cascade
+  add_foreign_key "mood_scores", "moods", on_delete: :cascade
 end
