@@ -24,11 +24,11 @@ RSpec.describe MoodsController, type: :controller do
   # Mood. As you add validations to Mood, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:mood)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -87,6 +87,29 @@ RSpec.describe MoodsController, type: :controller do
       end
     end
 
+    context "with identical name" do
+
+      before(:each) do
+        mood = Mood.create! valid_attributes
+      end
+
+      it "doesn't create a new Mood" do
+        expect {
+          post :create, {:mood => valid_attributes}, valid_session
+        }.to change(Mood, :count).by(0)
+      end
+
+      it "assigns a newly created but unsaved mood as @mood" do
+        post :create, {:mood => valid_attributes}, valid_session
+        expect(assigns(:mood)).to be_a_new(Mood)
+      end
+
+      it "re-renders the 'new' template" do
+        post :create, {:mood => valid_attributes}, valid_session
+        expect(response).to render_template("new")
+      end
+    end
+
     context "with invalid params" do
       it "assigns a newly created but unsaved mood as @mood" do
         post :create, {:mood => invalid_attributes}, valid_session
@@ -102,26 +125,33 @@ RSpec.describe MoodsController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+
+      new_name = FFaker::Lorem.word
+      new_description = FFaker::Lorem.paragraph
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+        name: new_name,
+        description: new_description 
+        }
       }
 
       it "updates the requested mood" do
         mood = Mood.create! valid_attributes
         put :update, {:id => mood.to_param, :mood => new_attributes}, valid_session
         mood.reload
-        skip("Add assertions for updated state")
+        expect(assigns(:mood).name).to eq(new_name)
+        expect(assigns(:mood).description).to eq(new_description)
       end
 
       it "assigns the requested mood as @mood" do
         mood = Mood.create! valid_attributes
-        put :update, {:id => mood.to_param, :mood => valid_attributes}, valid_session
+        put :update, {:id => mood.to_param, :mood => new_attributes}, valid_session
         expect(assigns(:mood)).to eq(mood)
       end
 
       it "redirects to the mood" do
         mood = Mood.create! valid_attributes
-        put :update, {:id => mood.to_param, :mood => valid_attributes}, valid_session
+        put :update, {:id => mood.to_param, :mood => new_attributes}, valid_session
         expect(response).to redirect_to(mood)
       end
     end
