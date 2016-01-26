@@ -61,9 +61,9 @@ class ChoiceCategoriesController < ApplicationController
         format.json { render json: "#{@choice_category.name} has associated Choices. Cannot Delete.", status: :unprocessable_entity }
       end
     else
-      @media_type.destroy
+      @choice_category.destroy
       respond_to do |format|
-        format.html { redirect_to media_types_url, notice: 'Choice Category was successfully destroyed.' }
+        format.html { redirect_to choice_categories_url, notice: 'Choice Category was successfully destroyed.' }
         format.json { head :no_content }
       end
     end
@@ -84,6 +84,9 @@ class ChoiceCategoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def choice_category_params
-      params[:choice_category]
+      params.require(:choice_category).permit(
+        :name,
+        :description
+        )
     end
 end

@@ -24,11 +24,11 @@ RSpec.describe ChoiceCategoriesController, type: :controller do
   # ChoiceCategory. As you add validations to ChoiceCategory, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:choice_category)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -102,15 +102,21 @@ RSpec.describe ChoiceCategoriesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+
+      new_name = FFaker::Lorem.word
+      new_description = FFaker::Lorem.paragraph
+
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        choice_category = { name: new_name, description: new_description }
       }
 
       it "updates the requested choice_category" do
         choice_category = ChoiceCategory.create! valid_attributes
         put :update, {:id => choice_category.to_param, :choice_category => new_attributes}, valid_session
         choice_category.reload
-        skip("Add assertions for updated state")
+        expect(choice_category.name).to eq(new_name)
+        expect(choice_category.description).to eq(new_description)
+        expect(assigns(:choice_category)).to eq(choice_category)
       end
 
       it "assigns the requested choice_category as @choice_category" do
@@ -142,18 +148,39 @@ RSpec.describe ChoiceCategoriesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested choice_category" do
-      choice_category = ChoiceCategory.create! valid_attributes
-      expect {
-        delete :destroy, {:id => choice_category.to_param}, valid_session
-      }.to change(ChoiceCategory, :count).by(-1)
+
+    context "with existing related choices" do
+
+
+      it "does not destroy the requested choice_category" do
+        choice = FactoryGirl.create(:choice)
+        choice_category = ChoiceCategory.create! valid_attributes
+        choice_category.choices << choice
+        expect {
+          delete :destroy, {:id => choice_category.to_param}, valid_session
+        }.to change(ChoiceCategory, :count).by(0)
+      end
+
+
     end
 
-    it "redirects to the choice_categories list" do
-      choice_category = ChoiceCategory.create! valid_attributes
-      delete :destroy, {:id => choice_category.to_param}, valid_session
-      expect(response).to redirect_to(choice_categories_url)
+    context "with no related choices" do
+
+      it "destroys the requested choice_category" do
+        choice_category = ChoiceCategory.create! valid_attributes
+        expect {
+          delete :destroy, {:id => choice_category.to_param}, valid_session
+        }.to change(ChoiceCategory, :count).by(-1)
+      end
+
+      it "redirects to the choice_categories list" do
+        choice_category = ChoiceCategory.create! valid_attributes
+        delete :destroy, {:id => choice_category.to_param}, valid_session
+        expect(response).to redirect_to(choice_categories_url)
+      end
+
     end
+
   end
 
 end
