@@ -24,11 +24,11 @@ RSpec.describe ArtsTypesController, type: :controller do
   # ArtsType. As you add validations to ArtsType, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:arts_type)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -102,15 +102,20 @@ RSpec.describe ArtsTypesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+
+      new_name = FFaker::Lorem.word
+      new_description = FFaker::Lorem.paragraph
+
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        arts_type = { name: new_name , description: new_description }
       }
 
       it "updates the requested arts_type" do
         arts_type = ArtsType.create! valid_attributes
         put :update, {:id => arts_type.to_param, :arts_type => new_attributes}, valid_session
         arts_type.reload
-        skip("Add assertions for updated state")
+        expect(arts_type.name).to eq(new_name)
+        expect(arts_type.description).to eq(new_description)
       end
 
       it "assigns the requested arts_type as @arts_type" do
