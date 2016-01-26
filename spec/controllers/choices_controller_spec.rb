@@ -24,11 +24,11 @@ RSpec.describe ChoicesController, type: :controller do
   # Choice. As you add validations to Choice, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:choice)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -102,15 +102,18 @@ RSpec.describe ChoicesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+
+      new_name = FFaker::Lorem.word
+
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        choice = { name: new_name }
       }
 
       it "updates the requested choice" do
         choice = Choice.create! valid_attributes
         put :update, {:id => choice.to_param, :choice => new_attributes}, valid_session
         choice.reload
-        skip("Add assertions for updated state")
+        expect(choice.name).to eq(new_name)
       end
 
       it "assigns the requested choice as @choice" do
