@@ -5,5 +5,6 @@ class MediaItem < ActiveRecord::Base
 	belongs_to :media_type
 
 	# accepts_nested_attributes_for :arts_types, :mood_scores, :moods
-	
+	validates_presence_of :name
+
 end

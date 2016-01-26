@@ -24,7 +24,9 @@ class MediaItemsController < ApplicationController
   # POST /media_items
   # POST /media_items.json
   def create
+
     @media_item = MediaItem.new(media_item_params)
+       
     set_relations
 
     respond_to do |format|
@@ -36,12 +38,14 @@ class MediaItemsController < ApplicationController
         format.json { render json: @media_item.errors, status: :unprocessable_entity }
       end
     end
+
   end
 
   # PATCH/PUT /media_items/1
   # PATCH/PUT /media_items/1.json
   def update
     @media_item.update(media_item_params)
+    
     set_relations
 
     respond_to do |format|
@@ -73,9 +77,9 @@ class MediaItemsController < ApplicationController
 
     # set the model relation values
     def set_relations
-      @media_item.media_type = MediaType.find(params[:media_item][:media_type])
-      @media_item.arts_types = ArtsType.find(params[:media_item][:arts_types].select{|key, value| value == "1" }.keys)
-      @media_item.moods = Mood.find(params[:media_item][:moods].select{|key, value| value == "1" }.keys)
+      params[:media_type] ? @media_item.media_type = MediaType.find(params[:media_type]) : "" # set media type if present
+      params[:arts_types] ? @media_item.arts_types = ArtsType.find(params[:arts_types].select{|key, value| value == "1" }.keys) : ""  # set arts types if present
+      params[:moods] ? @media_item.moods = Mood.find(params[:moods].select{|key, value| value == "1" }.keys) : "" # set moods if present
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

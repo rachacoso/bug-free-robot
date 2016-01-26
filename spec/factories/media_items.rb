@@ -5,7 +5,7 @@ FactoryGirl.define do
 		moods {[FactoryGirl.create(:mood)]}
   	association :media_type, factory: :media_type
 
-    name { FFaker::Lorem.words(3) }
+    name { FFaker::Lorem.words(3).join(" ") }
 		description { FFaker::Lorem.paragraph }
 		times_served { rand(1..10000000) }
 		duration { rand(1..100) }

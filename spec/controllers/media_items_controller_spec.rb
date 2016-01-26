@@ -20,15 +20,67 @@ require 'rails_helper'
 
 RSpec.describe MediaItemsController, type: :controller do
 
+  # setup associated records
+
+  let(:mood1) { FactoryGirl.create(:mood) }
+  let(:mood2) { FactoryGirl.create(:mood) }
+  let(:arts_type1) { FactoryGirl.create(:arts_type) }
+  let(:arts_type2) { FactoryGirl.create(:arts_type) }
+  let(:media_type) { FactoryGirl.create(:media_type) }
+
   # This should return the minimal set of attributes required to create a valid
   # MediaItem. As you add validations to MediaItem, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+  let(:valid_attributes) { 
+    {
+    name: FFaker::Lorem.words(3).join(" "),
+    description: FFaker::Lorem.paragraph,
+    } 
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+    name: "",
+    description: FFaker::Lorem.paragraph,
+    } 
+  }
+
+
+  # Set the valid and invalid params for post and put tests
+  let(:valid_params_all) { 
+    {
+    :media_item => {
+      name: FFaker::Lorem.words(3).join(" "),
+      description: FFaker::Lorem.paragraph     
+    },
+    media_type: media_type,
+    :moods => {
+      mood1.id => "1",
+      mood2.id => "1"
+    },
+    :arts_types => {
+      arts_type1.id => "1",
+      arts_type2.id => "1"
+    },
+    } 
+  }
+
+  let(:invalid_params_all) { 
+    {
+    :media_item => {
+      name: "",
+      description: FFaker::Lorem.paragraph
+    },
+    media_type: media_type,
+    :moods => {
+      mood1.id => "1",
+      mood2.id => "1"
+    },
+    :arts_types => {
+      arts_type1.id => "1",
+      arts_type2.id => "1"
+    },
+    } 
   }
 
   # This should return the minimal set of values that should be in the session
@@ -69,59 +121,159 @@ RSpec.describe MediaItemsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
+
       it "creates a new MediaItem" do
         expect {
-          post :create, {:media_item => valid_attributes}, valid_session
+          post :create, valid_params_all, valid_session
         }.to change(MediaItem, :count).by(1)
       end
 
       it "assigns a newly created media_item as @media_item" do
-        post :create, {:media_item => valid_attributes}, valid_session
+        post :create, valid_params_all, valid_session
         expect(assigns(:media_item)).to be_a(MediaItem)
         expect(assigns(:media_item)).to be_persisted
       end
 
       it "redirects to the created media_item" do
-        post :create, {:media_item => valid_attributes}, valid_session
+        post :create, valid_params_all, valid_session
         expect(response).to redirect_to(MediaItem.last)
       end
+
     end
 
+
+    context "with valid params and only subset of associations selected" do
+
+      let(:valid_params_subset) { 
+        {
+        :media_item => {
+          name: FFaker::Lorem.words(3).join(" "),
+          description: FFaker::Lorem.paragraph     
+        },
+        media_type: media_type,
+        :moods => {
+          mood1.id => "1",
+          mood2.id => "0"
+        },
+        :arts_types => {
+          arts_type1.id => "0",
+          arts_type2.id => "1"
+        },
+        } 
+      }
+
+      it "only creates associations for selected arts_type and mood" do
+        post :create, valid_params_subset, valid_session
+        expect(assigns(:media_item).moods).to eq([mood1])
+        expect(assigns(:media_item).arts_types).to eq([arts_type2])
+      end
+    
+    end
+
+
     context "with invalid params" do
+
       it "assigns a newly created but unsaved media_item as @media_item" do
-        post :create, {:media_item => invalid_attributes}, valid_session
+        post :create, invalid_params_all, valid_session
         expect(assigns(:media_item)).to be_a_new(MediaItem)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:media_item => invalid_attributes}, valid_session
+        post :create, invalid_params_all, valid_session
         expect(response).to render_template("new")
       end
     end
   end
 
   describe "PUT #update" do
+
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          name: "New Name",
+          description: "New Description"
+        } 
       }
 
       it "updates the requested media_item" do
         media_item = MediaItem.create! valid_attributes
         put :update, {:id => media_item.to_param, :media_item => new_attributes}, valid_session
         media_item.reload
-        skip("Add assertions for updated state")
+        expect(assigns(:media_item).name).to eq("New Name")
+        expect(assigns(:media_item).description).to eq("New Description")
       end
 
       it "assigns the requested media_item as @media_item" do
         media_item = MediaItem.create! valid_attributes
-        put :update, {:id => media_item.to_param, :media_item => valid_attributes}, valid_session
+        put :update, {:id => media_item.to_param, :media_item => new_attributes}, valid_session
         expect(assigns(:media_item)).to eq(media_item)
       end
 
       it "redirects to the media_item" do
         media_item = MediaItem.create! valid_attributes
-        put :update, {:id => media_item.to_param, :media_item => valid_attributes}, valid_session
+        put :update, {:id => media_item.to_param, :media_item => new_attributes}, valid_session
+        expect(response).to redirect_to(media_item)
+      end
+    end
+
+    context "with valid params and updated media type, arts types, and moods" do
+
+      let(:media_item) { MediaItem.create! valid_attributes_with_media_type }
+
+      let(:media_type_new) { FactoryGirl.create(:media_type) }
+      let(:mood3) { FactoryGirl.create(:mood) }
+      let(:arts_type3) { FactoryGirl.create(:arts_type) }
+
+      let(:valid_attributes_with_media_type) {
+        {
+          name: "New Name",
+          description: "New Description",
+          media_type: media_type,
+          moods: [mood1, mood2],
+          arts_types: [arts_type1, arts_type2]
+        } 
+      }
+      let(:new_attributes) {
+        {
+          name: "New Name",
+          description: "New Description"
+        } 
+      }
+
+      let(:update_hash) {
+        {
+          :id => media_item.to_param, 
+          :media_item => new_attributes, 
+          :media_type => media_type_new, 
+          :arts_types => {
+            arts_type1.id => "1", 
+            arts_type2.id => "1", 
+            arts_type3.id => "1"
+          }, 
+          :moods => {
+            mood1.id => "1", 
+            mood2.id => "0", 
+            mood3.id => "1"
+          }
+        }
+      }
+
+
+      it "updates the requested media_item" do
+        put :update, update_hash, valid_session
+        media_item.reload
+        expect(assigns(:media_item).media_type).to eq(media_type_new)
+        expect(assigns(:media_item).arts_types).to eq([arts_type1, arts_type2, arts_type3])
+        expect(assigns(:media_item).moods).to eq([mood1, mood3])
+      end
+
+      it "assigns the requested media_item as @media_item" do
+        put :update, update_hash, valid_session
+        expect(assigns(:media_item)).to eq(media_item)
+      end
+
+      it "redirects to the media_item" do
+        put :update, update_hash, valid_session
         expect(response).to redirect_to(media_item)
       end
     end

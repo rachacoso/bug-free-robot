@@ -23,7 +23,7 @@
 		<h4>Media Type</h4>
 	</div><!--/.small-3-->
 	<div class="small-9 columns">
-		<%= @media_item.media_type.name %>		
+		<%= @media_item.media_type ? @media_item.media_type.name : "Not yet categorized" %>		
 	</div><!--/.small-9-->
 </div><!--/.row-->
 <div class="row">
