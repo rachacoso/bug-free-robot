@@ -10,5 +10,6 @@ RSpec.describe Mood, type: :model do
   it { should have_many(:mood_choices) }
   it { should have_many(:media_items).through(:mood_scores) }
   it { should have_many(:choices).through(:mood_choices) }
-
+	it { should validate_uniqueness_of(:name) }
+	it { should validate_presence_of(:name) }
 end

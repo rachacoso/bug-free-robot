@@ -87,29 +87,6 @@ RSpec.describe MoodsController, type: :controller do
       end
     end
 
-    context "with identical name" do
-
-      before(:each) do
-        mood = Mood.create! valid_attributes
-      end
-
-      it "doesn't create a new Mood" do
-        expect {
-          post :create, {:mood => valid_attributes}, valid_session
-        }.to change(Mood, :count).by(0)
-      end
-
-      it "assigns a newly created but unsaved mood as @mood" do
-        post :create, {:mood => valid_attributes}, valid_session
-        expect(assigns(:mood)).to be_a_new(Mood)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:mood => valid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-
     context "with invalid params" do
       it "assigns a newly created but unsaved mood as @mood" do
         post :create, {:mood => invalid_attributes}, valid_session
