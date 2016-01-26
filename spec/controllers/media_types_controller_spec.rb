@@ -24,11 +24,11 @@ RSpec.describe MediaTypesController, type: :controller do
   # MediaType. As you add validations to MediaType, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:media_type)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { name: "" }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -102,26 +102,31 @@ RSpec.describe MediaTypesController, type: :controller do
 
   describe "PUT #update" do
     context "with valid params" do
+
+      new_name = FFaker::Lorem.word
+      new_description = FFaker::Lorem.paragraph
+
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { name: new_name, description: new_description }
       }
 
       it "updates the requested media_type" do
         media_type = MediaType.create! valid_attributes
         put :update, {:id => media_type.to_param, :media_type => new_attributes}, valid_session
         media_type.reload
-        skip("Add assertions for updated state")
+        expect(assigns(:media_type).name).to eq(new_name)
+        expect(assigns(:media_type).description).to eq(new_description)
       end
 
       it "assigns the requested media_type as @media_type" do
         media_type = MediaType.create! valid_attributes
-        put :update, {:id => media_type.to_param, :media_type => valid_attributes}, valid_session
+        put :update, {:id => media_type.to_param, :media_type => new_attributes}, valid_session
         expect(assigns(:media_type)).to eq(media_type)
       end
 
       it "redirects to the media_type" do
         media_type = MediaType.create! valid_attributes
-        put :update, {:id => media_type.to_param, :media_type => valid_attributes}, valid_session
+        put :update, {:id => media_type.to_param, :media_type => new_attributes}, valid_session
         expect(response).to redirect_to(media_type)
       end
     end
@@ -142,18 +147,39 @@ RSpec.describe MediaTypesController, type: :controller do
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested media_type" do
-      media_type = MediaType.create! valid_attributes
-      expect {
-        delete :destroy, {:id => media_type.to_param}, valid_session
-      }.to change(MediaType, :count).by(-1)
+
+    context "with existing related Media Items" do
+
+
+      it "does not destroy the requested media_item" do
+        media_item = FactoryGirl.create(:media_item)
+        media_type = MediaType.create! valid_attributes
+        media_type.media_items << media_item
+        expect {
+          delete :destroy, {:id => media_type.to_param}, valid_session
+        }.to change(MediaType, :count).by(0)
+      end
+
+
     end
 
-    it "redirects to the media_types list" do
-      media_type = MediaType.create! valid_attributes
-      delete :destroy, {:id => media_type.to_param}, valid_session
-      expect(response).to redirect_to(media_types_url)
+    context "with no related Media Items" do
+
+      it "destroys the requested media_type" do
+        media_type = MediaType.create! valid_attributes
+        expect {
+          delete :destroy, {:id => media_type.to_param}, valid_session
+        }.to change(MediaType, :count).by(-1)
+      end
+
+      it "redirects to the media_type list" do
+        media_type = MediaType.create! valid_attributes
+        delete :destroy, {:id => media_type.to_param}, valid_session
+        expect(response).to redirect_to(media_types_url)
+      end
+
     end
+
   end
 
 end

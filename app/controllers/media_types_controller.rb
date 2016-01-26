@@ -68,11 +68,6 @@ class MediaTypesController < ApplicationController
       end
     end
 
-    # @media_type.destroy
-    # respond_to do |format|
-    #   format.html { redirect_to media_types_url, notice: 'Media type was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
   end
 
   private
