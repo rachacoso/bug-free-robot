@@ -4,4 +4,5 @@ class Choice < ActiveRecord::Base
 	has_many :moods, through: :mood_choices
 	
 	validates_presence_of :name
+	validates_uniqueness_of :name
 end

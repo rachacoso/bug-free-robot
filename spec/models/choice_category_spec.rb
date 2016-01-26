@@ -12,4 +12,8 @@ RSpec.describe ChoiceCategory, type: :model do
   it { should be_valid }
 
   it { should have_many(:choices) }
+
+	it { should validate_uniqueness_of(:name) }
+	it { should validate_presence_of(:name) }
+	
 end

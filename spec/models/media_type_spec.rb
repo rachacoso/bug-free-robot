@@ -10,5 +10,8 @@ RSpec.describe MediaType, type: :model do
   it { should respond_to(:description) }
   it { should be_valid }
 
+	it { should validate_uniqueness_of(:name) }
+	it { should validate_presence_of(:name) }
+
   it { should have_many(:media_items) }
 end

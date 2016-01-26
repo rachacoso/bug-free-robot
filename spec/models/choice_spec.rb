@@ -11,6 +11,8 @@ RSpec.describe Choice, type: :model do
   it { should respond_to(:times_selected) }
   it { should be_valid }
 
+	it { should validate_uniqueness_of(:name) }
+	it { should validate_presence_of(:name) }
 
   it { should belong_to(:choice_category) }
   it { should have_many(:mood_choices) }
