@@ -21,7 +21,7 @@
       <%= f.text_field :description %>
 
 
-      <%#= select_tag "media_type", options_from_collection_for_select(MediaType.all, :id, :name, @media_item.media_type ? @media_item.media_type.id : "") %>
+      <%= select_tag "media_type", options_from_collection_for_select(MediaType.all, :id, :name, @media_item.media_type ? @media_item.media_type.id : "") %>
       
 
       <%= label_tag "Arts Type" %>
