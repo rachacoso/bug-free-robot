@@ -1,6 +1,17 @@
 class ChoicesController < ApplicationController
   before_action :set_choice, only: [:show, :edit, :update, :destroy]
 
+
+  # GET /qs
+  # GET /qs.json
+  def question_set
+    @choice_set = Choice.get_set
+    respond_to do |format|
+        format.html { render :question_set }
+        format.json { render json: @choice_set, status: :success }
+    end
+  end
+
   # GET /choices
   # GET /choices.json
   def index

@@ -1,0 +1,7 @@
+choice set:<br>
+<% @choice_set.each do |category,choices| %>
+  <%= category %><br>
+  <% choices.each do |ch| %>
+    <%= ch.name %><br>
+  <% end %>
+<% end %>
