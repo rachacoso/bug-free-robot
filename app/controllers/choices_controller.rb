@@ -15,7 +15,7 @@ class ChoicesController < ApplicationController
   # GET /choices
   # GET /choices.json
   def index
-    @choices = Choice.all
+    @choice_categories = ChoiceCategory.all
   end
 
   # GET /choices/1
