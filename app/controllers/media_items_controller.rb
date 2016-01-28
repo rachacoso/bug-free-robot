@@ -1,10 +1,16 @@
 class MediaItemsController < ApplicationController
   before_action :set_media_item, only: [:show, :edit, :update, :destroy]
 
+  # GET /s
+  # GET /s.json
+  def serve
+    @media_item = MediaItem.serve()
+  end
+
   # GET /media_items
   # GET /media_items.json
   def index
-    @media_items = MediaItem.all
+    @media_types = MediaType.all
   end
 
   # GET /media_items/1

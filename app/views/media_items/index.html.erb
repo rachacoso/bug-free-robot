@@ -6,15 +6,19 @@ Media Items
 
 <h1>Media Items</h1>
 
+<% @media_types.each do |mt| %>
 <table>
   <thead>
     <tr>
-      <th colspan="4"></th>
+      <th colspan="4"><%= mt.name %></th>
     </tr>
   </thead>
 
   <tbody>
-    <% @media_items.each do |media_item| %>
+    <% if mt.media_items.empty? %>
+    <tr><td colspan="4">No Items</td></tr>
+    <% else %>
+    <% mt.media_items.each do |media_item| %>
       <tr>
         <td><%= media_item.name %></td>
         <td><%= link_to 'Show', media_item %></td>
@@ -22,9 +26,11 @@ Media Items
         <td><%= link_to 'Destroy', media_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
+    <% end %>
+
   </tbody>
 </table>
-
+<% end %>
 <br>
 
 <%= link_to 'New Media item', new_media_item_path %>
