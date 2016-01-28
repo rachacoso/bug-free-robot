@@ -13,6 +13,7 @@ RSpec.describe Choice, type: :model do
 
 	it { should validate_uniqueness_of(:name) }
 	it { should validate_presence_of(:name) }
+  it { should validate_presence_of(:choice_category) }
 
   it { should belong_to(:choice_category) }
   it { should have_many(:mood_choices) }
