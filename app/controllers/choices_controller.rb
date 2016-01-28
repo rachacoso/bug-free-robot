@@ -82,6 +82,7 @@ class ChoicesController < ApplicationController
     def choice_params
       params.require(:choice).permit(
         :name,
+        :choice_category_id,
         :mood_ids => []
       )
     end

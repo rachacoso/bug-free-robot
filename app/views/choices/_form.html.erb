@@ -23,13 +23,37 @@
   </div>
 
   <div class="inputs">
-    <%= f.collection_check_boxes :mood_ids, Mood.all, :id, :name do |b| %>
     <div class="row">
-      <div class="small-3 columns text-right"><%= b.check_box %></div><!--/.small-3-->
-      <div class="small-9 columns"><%= b.label %></div><!--/.small-9-->
+      <div class="small-3 columns">
+        Moods
+      </div><!--/.small-3-->
+      <div class="small-9 columns">
+        <%= f.collection_check_boxes :mood_ids, Mood.all, :id, :name do |b| %>
+        <div class="row">
+          <div class="small-3 columns text-right"><%= b.check_box %></div><!--/.small-3-->
+          <div class="small-9 columns"><%= b.label %></div><!--/.small-9-->
+        </div><!--/.row-->
+        <% end %>
+      </div><!--/.small-9-->
     </div><!--/.row-->
-    <% end %>
   </div>
+
+  <div class="inputs">
+    <div class="row">
+      <div class="small-3 columns">
+        Choice Category
+      </div><!--/.small-3-->
+      <div class="small-9 columns">
+        <%= f.collection_select :choice_category_id, ChoiceCategory.all, :id, :name do |b| %>
+        <div class="row">
+          <div class="small-3 columns text-right"><%= b.check_box %></div><!--/.small-3-->
+          <div class="small-9 columns"><%= b.label %></div><!--/.small-9-->
+        </div><!--/.row-->
+        <% end %>
+      </div><!--/.small-9-->
+    </div><!--/.row-->
+  </div>
+
 
   <div class="actions">
     <%= f.submit %>
