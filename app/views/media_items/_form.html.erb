@@ -20,25 +20,21 @@
       <%= f.label :description,  "Description" %>
       <%= f.text_field :description %>
 
-
-      <%= select_tag "media_type", options_from_collection_for_select(MediaType.all, :id, :name, @media_item.media_type ? @media_item.media_type.id : "") %>
-      
+      <%= f.collection_select :media_type_id, MediaType.all, :id, :name %>
 
       <%= label_tag "Arts Type" %>
 
-      <% ArtsType.all.each do |at| %>
-        <%= hidden_field_tag "arts_types[#{at.id}]", 0, id: '' %>
-        <%= check_box_tag("arts_types[#{at.id}]", 1, (@media_item.arts_types.include?(at) rescue false) ? true : false) %>
-        <%= label_tag "arts_types[#{at.id}]", at.name %>
-      <% end %>
+        <%= f.collection_check_boxes :arts_type_ids, ArtsType.all, :id, :name do |b| %>
+          <%= b.check_box %>
+          <%= b.label %>
+        <% end %>
 
       <%= label_tag "Mood" %>
 
-      <% Mood.all.each do |m| %>
-        <%= hidden_field_tag "moods[#{m.id}]", 0, id: '' %>
-        <%= check_box_tag("moods[#{m.id}]", 1, (@media_item.moods.include?(m) rescue false) ? true : false) %>
-        <%= label_tag "moods[#{m.id}]", m.name %>
-      <% end %>
+        <%= f.collection_check_boxes :mood_ids, Mood.all, :id, :name do |b| %>
+          <%= b.check_box %>
+          <%= b.label %>
+        <% end %>
 
       <div class="actions">
         <%= f.submit class: "button tiny" %>

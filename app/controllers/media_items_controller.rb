@@ -26,8 +26,6 @@ class MediaItemsController < ApplicationController
   def create
 
     @media_item = MediaItem.new(media_item_params)
-       
-    set_relations
 
     respond_to do |format|
       if @media_item.save
@@ -45,8 +43,6 @@ class MediaItemsController < ApplicationController
   # PATCH/PUT /media_items/1.json
   def update
     @media_item.update(media_item_params)
-    
-    set_relations
 
     respond_to do |format|
       if @media_item.save
@@ -75,18 +71,14 @@ class MediaItemsController < ApplicationController
       @media_item = MediaItem.find(params[:id])
     end
 
-    # set the model relation values
-    def set_relations
-      params[:media_type] ? @media_item.media_type = MediaType.find(params[:media_type]) : "" # set media type if present
-      params[:arts_types] ? @media_item.arts_types = ArtsType.find(params[:arts_types].select{|key, value| value == "1" }.keys) : ""  # set arts types if present
-      params[:moods] ? @media_item.moods = Mood.find(params[:moods].select{|key, value| value == "1" }.keys) : "" # set moods if present
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def media_item_params
       params.require(:media_item).permit(
         :name,
-        :description
+        :description,
+        :media_type_id,
+        :mood_ids => [],
+        :arts_type_ids => []
       )
     end
 end
